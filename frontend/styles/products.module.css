@@ -1,0 +1,244 @@
+/* ===============================
+   Products Page Container
+   =============================== */
+.productsPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f0fdfa;
+  min-height: 100vh;
+  padding-bottom: 2rem; /* space at bottom */
+}
+
+/* ===============================
+   Product Card
+   =============================== */
+.productsCard {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 3rem 2rem;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  border-top: 5px solid #14b8a6;
+  margin-top: 4rem; /* push card below navbar */
+}
+
+/* ===============================
+   Titles
+   =============================== */
+.productsTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #14b8a6;
+  margin-bottom: 0.5rem;
+}
+
+.productsSubtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.productsSubHeading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem 0;
+  color: #0f766e;
+}
+
+/* ===============================
+   Form Row (Inputs)
+   =============================== */
+.formRow {
+  display: flex;
+  justify-content: center;
+  gap: 2rem; /* space between inputs */
+  flex-wrap: wrap; /* wrap on small screens */
+  margin-bottom: 1.5rem;
+}
+
+.inputContainer {
+  position: relative;
+  min-width: 220px; /* ensures spacing between inputs */
+  flex: 1 1 220px;
+}
+
+.inputContainer input {
+  width: 100%;
+  padding: 1rem 1rem 0.5rem 0.1rem;
+  border-radius: 1rem;
+  border: 2px solid #d1d5db;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.inputContainer label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.inputContainer input:focus {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 3px rgba(20,184,166,0.2);
+}
+
+.inputContainer input:focus + label,
+.inputContainer input:not(:placeholder-shown) + label {
+  top: 0.2rem;
+  font-size: 0.8rem;
+  color: #14b8a6;
+  background: #ffffff;
+  padding: 0 0.25rem;
+}
+
+.inputSmall {
+  max-width: 140px;
+}
+
+/* ===============================
+   Buttons
+   =============================== */
+.btnGroup {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.btnPrimary {
+  background: linear-gradient(90deg, #14b8a6, #0f766e);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnSecondary {
+  background: #e5e7eb;
+  color: #6b7280;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ===============================
+   Product List
+   =============================== */
+.productList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.productItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.75rem;
+  border-radius: 1rem;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.productItem:hover {
+  background: #f0fdfa;
+}
+
+.qty {
+  font-weight: 600;
+  color: #14b8a6;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnEdit {
+  background: #fcd34d;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #92400e;
+  transition: all 0.2s ease;
+}
+
+.btnEdit:hover {
+  transform: scale(1.05);
+}
+
+.btnDelete {
+  background: #f87171;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #7f1d1d;
+  transition: all 0.2s ease;
+}
+
+.btnDelete:hover {
+  transform: scale(1.05);
+}
+
+.empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 1rem;
+}
+
+/* ===============================
+   Loading
+   =============================== */
+.loading {
+  text-align: center;
+  margin-top: 5rem;
+  font-size: 1.25rem;
+  color: #0f766e;
+}
+/* ===============================
+   Tabs
+   =============================== */
+.tabBar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tabBtn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  border: 2px solid #14b8a6;
+  background: transparent;
+  color: #0f766e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+  background: #f0fdfa;
+}
+
+.activeTab {
+  background: linear-gradient(90deg, #14b8a6, #0f766e);
+  color: #fff;
+  border: none;
+}

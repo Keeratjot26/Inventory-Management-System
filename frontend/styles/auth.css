@@ -1,0 +1,151 @@
+:root{
+  --brand-green: #14b8a6;   /* change here if you want a different green */
+  --brand-green-dark: #0f766e;
+  --muted: #6b7280;
+}
+
+/* Page */
+.auth-page {
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f9fafb;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Card */
+.auth-card {
+  width:100%;
+  max-width:420px;
+  background:#ffffff;
+  padding:2.25rem;
+  border-radius:1rem;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.08);
+  text-align:center;
+  animation: cardFade 0.5s ease both;
+}
+
+/* Logo row: sparkle (emoji) BEFORE the brand text */
+.auth-logo {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+  margin-bottom:1.1rem;
+}
+.auth-logo .brand {
+  font-size:1.5rem;
+  font-weight:700;
+  color:#23adb4; /* plain text — no shine */
+  line-height:1;
+}
+
+/* Sparkle emoji (green, bigger, subtle twinkle) */
+.sparkle {
+  display:inline-block;
+  font-size:2.4rem;               /* bigger sparkle */
+  line-height:1;
+  color: var(--brand-green);      /* exact green controlled by :root var */
+  transform-origin:center;
+  animation: sparkleTwinkle 2.2s infinite cubic-bezier(.4,.0,.2,1);
+  /* small, subtle glow only on the emoji */
+  text-shadow: 0 0 6px rgba(20,184,166,0.12);
+  position: relative;
+  top: 2px; /* visually center with text */
+}
+
+/* very subtle twinkle: small scale + tiny rotate — not jumpy */
+@keyframes sparkleTwinkle {
+  0%,100% { transform: scale(1) rotate(0deg); opacity: 0.95; }
+  50%     { transform: scale(1.12) rotate(3deg); opacity: 1; }
+}
+
+/* Title / subtitle */
+.auth-title { margin:0; font-size:1.125rem; color:#0f172a; font-weight:600; }
+.auth-subtitle { margin:0.25rem 0 1rem; color:var(--muted); font-size:0.95rem; }
+
+/* Inputs */
+.auth-input {
+  width:100%;
+  padding:0.75rem 0.9rem;
+  margin-bottom:0.9rem;
+  border-radius:8px;
+  border:1px solid #e6e9ef;
+  font-size:0.95rem;
+  transition: box-shadow .18s, border-color .18s, transform .12s;
+}
+
+.auth-input:focus{
+  outline:none;
+  border-color: var(--brand-green);
+  box-shadow: 0 6px 20px rgba(20,184,166,0.06);
+  transform: translateY(-1px);
+}
+
+/* Primary login button */
+.auth-btn {
+  width:100%;
+  padding:0.78rem;
+  border-radius:8px;
+  background: var(--brand-green);
+  color: #fff;
+  border: none;
+  font-weight:600;
+  cursor:pointer;
+  transition: transform .12s, background .12s, box-shadow .12s;
+}
+.auth-btn:hover{ transform: translateY(-2px); background: var(--brand-green-dark); box-shadow: 0 8px 24px rgba(16,163,127,0.08); }
+
+/* Forgot */
+.forgot-password { text-align:right; font-size:0.88rem; color:var(--brand-green); cursor:pointer; margin-bottom:0.75rem;}
+.forgot-password:hover { text-decoration: underline; }
+
+/* Divider */
+.auth-divider {
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  color:#9aa4b2;
+  font-size:0.85rem;
+  margin:1rem 0;
+}
+.auth-divider::before, .auth-divider::after {
+  content:"";
+  flex:1;
+  height:1px;
+  background:#eef2f7;
+}
+
+/* Google button */
+.auth-google {
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.6rem;
+  padding:0.7rem;
+  border-radius:8px;
+  border:1px solid #e6e9ef;
+  background:#fff;
+  cursor:pointer;
+  transition: transform .12s, background .12s;
+}
+.auth-google:hover { background: #f8fafc; transform: translateY(-1px); }
+.auth-google img { width:18px; height:18px; display:block; }
+
+/* Signup link */
+.auth-link { margin-top:1rem; color:var(--brand-green); cursor:pointer; font-size:0.92rem; }
+.auth-link:hover { text-decoration: underline; }
+
+/* Card appear */
+@keyframes cardFade {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* small screens */
+@media (max-width:420px){
+  .auth-card { padding:1.25rem; width:92%; }
+  .sparkle { font-size:2rem; }
+}

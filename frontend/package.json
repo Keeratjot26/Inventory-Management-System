@@ -1,0 +1,27 @@
+{
+  "name": "inventory-management-system",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev && open http://localhost:3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "clean-install": "npx rimraf node_modules package-lock.json .next && npm cache clean --force && npm install --legacy-peer-deps"
+  },
+  "dependencies": {
+    "firebase": "^12.3.0",
+    "framer-motion": "^12.23.16",
+    "next": "^15.5.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.6.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "open": "^9.1.0"
+  }
+}

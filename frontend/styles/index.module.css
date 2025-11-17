@@ -1,0 +1,183 @@
+/* ===============================
+   Page
+   =============================== */
+.page {
+  font-family: "Inter", sans-serif;
+  background: #f0fdfa;
+  color: #1f2937;
+  overflow-x: hidden;
+}
+
+/* ===============================
+   Hero Section (extended)
+   =============================== */
+.hero {
+  text-align: center;
+  padding: 12rem 2rem 10rem; /* taller */
+  background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -150px;
+  right: -150px;
+  width: 350px;
+  height: 350px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-30px) translateX(20px); }
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.heroSubtitle {
+  font-size: 1.4rem;
+  margin-bottom: 2.5rem;
+  color: #e0fdfa;
+}
+
+.ctaBtn {
+  display: inline-block;
+  background: white;
+  color: #0f766e;
+  padding: 1rem 2.25rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.ctaBtn:hover {
+  background: #f0fdfa;
+}
+
+/* ===============================
+   Parallax About Section
+   =============================== */
+.about {
+  height: 60vh;
+  background: url("https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=1600&q=80")
+    no-repeat center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background-attachment: fixed; /* parallax effect */
+}
+
+.about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 118, 110, 0.65);
+}
+
+.aboutContent {
+  position: relative;
+  max-width: 700px;
+  color: white;
+  padding: 2rem;
+}
+
+.aboutContent h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.aboutContent p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* ===============================
+   Features Section
+   =============================== */
+.features {
+  padding: 6rem 2rem;
+  background: #ffffff;
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #0f766e;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.featureCard {
+  background: #f9fafb;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  text-align: left;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  box-shadow: 0 15px 30px rgba(20,184,166,0.25);
+}
+
+.featureCard h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #14b8a6;
+  margin-bottom: 0.75rem;
+}
+
+.featureCard p {
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ===============================
+   Footer
+   =============================== */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  background: #0f766e;
+  color: white;
+  margin-top: 3rem;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
