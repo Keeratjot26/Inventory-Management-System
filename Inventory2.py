@@ -58,6 +58,12 @@ st.markdown(
     .badge-safe { background:#e6fff8; color:#006d6d; padding:6px 10px; border-radius:8px; font-weight:600; }
     .badge-near { background:#fff6e6; color:#8a5a00; padding:6px 10px; border-radius:8px; font-weight:600; }
     .badge-exp { background:#ffecec; color:#9b1e1e; padding:6px 10px; border-radius:8px; font-weight:600; }
+
+    /* ---- FIXES: ensure blue elements show white text; keep global text readable ---- */
+    .block-container, .block-container * { color:#0f172a; }
+    [data-testid="stTab"] button div p { color:#0f172a !important; font-weight:600; }
+    .pill, .badge { background:#2F6DF6; color:#ffffff !important; padding:6px 10px; border-radius:8px; font-weight:600; }
+    h1, h2, h3 { color:#0f172a !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -216,7 +222,8 @@ st.sidebar.header("Controls")
 with st.sidebar.expander("Data Source"):
     st.markdown("**Backend:** " + BACKEND_LABEL)
     if st.button("🔁 Refresh data from MongoDB"):
-        load_mongo_data.cache_clear()
+        # FIX: correct cache clear for @st.cache_data
+        load_mongo_data.clear()
         df_raw_new, err2 = load_mongo_data()
         if err2:
             st.sidebar.error("Refresh failed: " + err2)
@@ -287,7 +294,8 @@ with tab_dashboard:
             if not monthly.empty:
                 monthly['month_str'] = monthly['invoicedate'].dt.strftime('%Y-%m')
                 fig = px.line(monthly, x='month_str', y='quantity', markers=True, labels={'month_str': 'Month', 'quantity': 'Units Sold'})
-                st.plotly_chart(fig, width="stretch")
+                # FIX: use_container_width for responsive sizing
+                st.plotly_chart(fig, use_container_width=True)
             else:
                 st.info("No valid invoice dates to show trend.")
         else:
@@ -312,7 +320,10 @@ with tab_dashboard:
                 sns.heatmap(heat, cmap='YlGnBu', ax=ax2, robust=True)
                 ax2.set_xlabel("Month")
                 ax2.set_ylabel("Product")
-                st.pyplot(fig2, width="stretch")
+                # FIX: proper layout + clear figure for Streamlit
+                fig2.tight_layout()
+                st.pyplot(fig2, clear_figure=True)
+                plt.close(fig2)
             else:
                 st.info("Not enough data to render heatmap.")
         else:
@@ -360,7 +371,8 @@ with tab_dashboard:
             inv = (df_filtered.groupby('product')['stock_level'].sum().sort_values(ascending=False).reset_index())
             if not inv.empty:
                 fig3 = px.bar(inv.head(10), x='product', y='stock_level')
-                st.plotly_chart(fig3, width="stretch")
+                # FIX: use_container_width for responsive sizing
+                st.plotly_chart(fig3, use_container_width=True)
             else:
                 st.info("No stock data to plot.")
         else:
@@ -388,7 +400,8 @@ with tab_forecast:
                 show = ddf[ddf['invoicedate'] >= (last_date - pd.Timedelta(days=history_days))]
                 title_name = "All Products" if sel_product == "All" else sel_product
                 figf = px.line(show, x="invoicedate", y=["quantity", "MA7"], labels={"value": "Units", "variable": "Series", "invoicedate": "Date"}, title=f"Demand & 7-Day Moving Average — {title_name}")
-                st.plotly_chart(figf, width="stretch")
+                # FIX: use_container_width for responsive sizing
+                st.plotly_chart(figf, use_container_width=True)
             else:
                 st.info("No demand data to show.")
         else:
@@ -419,8 +432,10 @@ with tab_alerts:
 # ---------------- ADMIN TAB ----------------
 with tab_admin:
     st.header("Admin / Export & Debug")
-    if st.button("Download cleaned CSV"):
-        st.download_button("Download", df_filtered.to_csv(index=False), file_name="inventory_cleaned.csv", mime="text/csv")
+    # FIX: single-click download button
+    csv = df_filtered.to_csv(index=False).encode("utf-8")
+    st.download_button("Download cleaned CSV", csv, file_name="inventory_cleaned.csv", mime="text/csv")
+
     st.subheader("Debug: Raw Columns & Sample Data")
     st.write("Columns in raw MongoDB merged data:")
     st.code(list(df_raw.columns))
