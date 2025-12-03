@@ -74,38 +74,41 @@ st.markdown(
 def load_mongo_data():
     """
     Loads products and sales; returns (df, None) or (None, error_message).
-    Designed to fail fast if Atlas is unreachable (IP whitelist / creds / DNS).
+    Tuned for Streamlit Cloud + Atlas.
     """
     try:
         client = MongoClient(
             MONGO_URI,
-            serverSelectionTimeoutMS=3000,  # 3s to pick a server
-            connectTimeoutMS=3000,          # 3s to connect
-            socketTimeoutMS=3000,           # 3s for read/write
-            retryWrites=False,              # avoid extra retries during debug
-            tls=True                        # ensure TLS on Atlas
+            serverSelectionTimeoutMS=8000,  # 8s to find a server
+            connectTimeoutMS=8000,          # 8s to connect TLS
+            socketTimeoutMS=12000,          # 12s for read/write
+            retryWrites=False,
+            tls=True
         )
-        # Hard ping so we fail fast on bad URI / network / whitelist
         client.admin.command("ping")
     except Exception as e:
-        return None, f"MongoDB connection failed (likely network/IP whitelist or URI creds): {e}"
+        return None, f"MongoDB connection failed (network/IP allowlist or URI creds): {e}"
 
     try:
         db = client[DB_NAME]
         products_collection = db[PRODUCTS_COLLECTION]
         sales_collection = db[SALES_COLLECTION]
 
-        # Cap each query’s time so nothing hangs forever
-        products_df = pd.DataFrame(list(products_collection.find({}, max_time_ms=3000)))
-        sales_df = pd.DataFrame(list(sales_collection.find({}, max_time_ms=3000)))
+        # lightweight preflight to surface permission/allowlist issues quickly
+        products_collection.estimated_document_count()
+        sales_collection.estimated_document_count()
 
-        products_df = products_df.drop(columns=['_id'], errors='ignore')
-        sales_df = sales_df.drop(columns=['_id'], errors='ignore')
+        # give each find enough time but still bounded
+        products_df = pd.DataFrame(
+            list(products_collection.find({}, {"_id": 0}, max_time_ms=12000))
+        )
+        sales_df = pd.DataFrame(
+            list(sales_collection.find({}, {"_id": 0}, max_time_ms=12000))
+        )
 
         if sales_df.empty and products_df.empty:
             return None, "Both products and sales collections are empty."
 
-        # Find a reasonable merge key automatically
         merge_key = None
         for cand in ['product_id', 'product', 'name', 'product_name', 'sku', 'code']:
             if cand in sales_df.columns and cand in products_df.columns:
