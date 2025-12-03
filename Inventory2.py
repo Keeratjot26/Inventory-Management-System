@@ -73,24 +73,31 @@ st.markdown(
 @st.cache_data(ttl=120)
 def load_mongo_data():
     """
-    Loads products and sales collections, merges them (if possible) and returns a dataframe.
-    Returns (df, None) on success, (None, error_message) on failure.
+    Loads products and sales; returns (df, None) or (None, error_message).
+    Designed to fail fast if Atlas is unreachable (IP whitelist / creds / DNS).
     """
     try:
-        # use a short server selection timeout so app fails fast if DB is unreachable
-        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
-        # Force a connection attempt (will raise if cannot connect/authenticate)
-        client.server_info()
+        client = MongoClient(
+            MONGO_URI,
+            serverSelectionTimeoutMS=3000,  # 3s to pick a server
+            connectTimeoutMS=3000,          # 3s to connect
+            socketTimeoutMS=3000,           # 3s for read/write
+            retryWrites=False,              # avoid extra retries during debug
+            tls=True                        # ensure TLS on Atlas
+        )
+        # Hard ping so we fail fast on bad URI / network / whitelist
+        client.admin.command("ping")
     except Exception as e:
-        return None, f"MongoDB connection failed: {e}"
+        return None, f"MongoDB connection failed (likely network/IP whitelist or URI creds): {e}"
 
     try:
         db = client[DB_NAME]
         products_collection = db[PRODUCTS_COLLECTION]
         sales_collection = db[SALES_COLLECTION]
 
-        products_df = pd.DataFrame(list(products_collection.find()))
-        sales_df = pd.DataFrame(list(sales_collection.find()))
+        # Cap each query’s time so nothing hangs forever
+        products_df = pd.DataFrame(list(products_collection.find({}, max_time_ms=3000)))
+        sales_df = pd.DataFrame(list(sales_collection.find({}, max_time_ms=3000)))
 
         products_df = products_df.drop(columns=['_id'], errors='ignore')
         sales_df = sales_df.drop(columns=['_id'], errors='ignore')
@@ -98,7 +105,7 @@ def load_mongo_data():
         if sales_df.empty and products_df.empty:
             return None, "Both products and sales collections are empty."
 
-        # Try to merge on a reasonable key
+        # Find a reasonable merge key automatically
         merge_key = None
         for cand in ['product_id', 'product', 'name', 'product_name', 'sku', 'code']:
             if cand in sales_df.columns and cand in products_df.columns:
@@ -107,11 +114,7 @@ def load_mongo_data():
 
         if merge_key:
             df_merged = pd.merge(
-                sales_df,
-                products_df,
-                on=merge_key,
-                how='left',
-                suffixes=('', '_prod')
+                sales_df, products_df, on=merge_key, how='left', suffixes=('', '_prod')
             )
         else:
             df_merged = sales_df.copy()
@@ -120,6 +123,7 @@ def load_mongo_data():
 
     except Exception as e:
         return None, f"Error when querying MongoDB collections: {e}"
+
 
 # ---------------- SMALL HELPER TO AUTO-DETECT COLUMNS ----------------
 def find_first_col(df, keywords):
