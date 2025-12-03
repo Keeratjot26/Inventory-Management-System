@@ -18,7 +18,7 @@ st.set_page_config(page_title="Smart Inventory Analytics", layout="wide", initia
 st.write("Environment: Streamlit startup - Python", sys.version.split()[0])
 
 # ---------------- CONFIG ----------------
-MONGO_URI = "mongodb+srv://arshnoorkaur:Arshnoor1740@cluster0.ea5r0.mongodb.net/inventory?retryWrites=true&w=majority"
+MONGO_URI = "mongodb+srv://arshnoorkaur:Arshnoor1740@cluster0.ea5r0.mongodb.net/inventory?retryWrites=true&w=majority&appName=Cluster0"
 DB_NAME = "inventory"
 PRODUCTS_COLLECTION = "products"
 SALES_COLLECTION = "sales"
