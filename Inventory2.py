@@ -22,7 +22,7 @@ st.write("Environment: Streamlit startup - Python", sys.version.split()[0])
 # ---------------- CONFIG ----------------
 def get_mongo_uri() -> str:
     """Load Mongo URI from Streamlit Secrets or environment, fail gracefully with message."""
-    uri = st.secrets.get("MONGO_URI") or os.getenv("MONGO_URI")
+    uri = "mongodb+srv://arshnoorkaur:Arshnoor1740@cluster0.ea5r0.mongodb.net/inventory?retryWrites=true&w=majority&appName=Cluster0" or st.secrets.get("MONGO_URI") or os.getenv("MONGO_URI")
     if not uri:
         st.error(
             "Missing MONGO_URI. Add it in Streamlit Secrets (Manage app → Settings → Secrets) as:\n"
